@@ -47,6 +47,7 @@ const Artist = (props) => {
     if (loader) {
       setIsloading(true);
     }
+
     let _response = await getArtistAPICall(pageSize, offset);
     setIsloading(false);
     if (_response.isSuccess) {
@@ -56,8 +57,10 @@ const Artist = (props) => {
         let _user = [artist.artistName, artist.artistImage, count];
         return _user;
       });
-      setArtist([...artist, ..._artist]);
-      setTotalCount(_response.total)
+      if(artist.length <totalCount){
+        setArtist([...artist, ..._artist]);
+        setTotalCount(_response.total)
+      }
     }
   };
   const handleDeleteRow = async (id) => {
@@ -92,6 +95,9 @@ const Artist = (props) => {
             columns={columns}
             pagination={false}
           />
+          <div style={{display:'flex' ,justifyContent:'space-between',marginTop:'10px'}}>
+            <span> {artist.length} of {totalCount}</span>
+
            {
             totalCount > artist.length &&
             <Button
@@ -103,7 +109,10 @@ const Artist = (props) => {
             >
               View More
             </Button>
+
           }
+          </div>
+
 
         </>
       )}

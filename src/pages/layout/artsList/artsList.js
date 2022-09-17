@@ -111,8 +111,10 @@ const ArtsList = (props) => {
         return _user;
       });
       setTotalCount(_response.total)
-      setArtsList([...artsList, ..._artsList]);
-      setArts([...artsList, ..._response.artsList]);
+      if (artsList.length < totalCount) {
+        setArtsList([...artsList, ..._artsList]);
+        setArts([...artsList, ..._response.artsList]);
+      }
     }
   };
 
@@ -147,19 +149,21 @@ const ArtsList = (props) => {
             title={"Arts"}
             columns={columns}
             pagination={false} />
-          {
-            totalCount > artsList.length &&
-            <Button
-              type="button"
-              variant="contained"
-              onClick={handlePageClick}
-              style={{ backgroundColor: "#194B43" }}
-              sx={{ mt: 3, mb: 2 }}
-            >
-              View More
-            </Button>
-          }
-
+          <div style={{ display: 'flex', alignItems:'center', justifyContent: 'space-between', marginTop: '10px' }}>
+            <span> {artsList.length} of {totalCount}</span>
+            {
+              totalCount > artsList.length &&
+              <Button
+                type="button"
+                variant="contained"
+                onClick={handlePageClick}
+                style={{ backgroundColor: "#194B43" }}
+                sx={{ mt: 3, mb: 2 }}
+              >
+                View More
+              </Button>
+            }
+          </div>
         </>
       )}
       <Popup isOpen={open} handleClose={handleClosePopup} title={`Add art`}>

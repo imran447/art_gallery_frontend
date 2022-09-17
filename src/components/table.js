@@ -12,7 +12,7 @@ const muiCache = createCache({
 
 const Table = ({ title, tableData, columns,pagination = true }) => {
   const [responsive, setResponsive] = useState("standard");
-  const [tableBodyHeight, setTableBodyHeight] = useState("400px");
+  const [tableBodyHeight, setTableBodyHeight] = useState('60vh');
   const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState("");
   const [searchBtn, setSearchBtn] = useState(true);
   const [downloadBtn, setDownloadBtn] = useState(true);
