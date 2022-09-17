@@ -1,14 +1,15 @@
-import { Button, CircularProgress, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField, MenuItem, Select, } from "@mui/material";
 import { useState } from "react";
 import { handleToastMessage } from "../../../shared/handleToastMessage";
 import { addArtAPICall } from "../../services/arts";
 
-const AddArt = ({handleClose}) => {
+const AddArt = ({ handleClose }) => {
   const [title, setTitle] = useState("");
   const [artistName, setArtistName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [artImage, setArtImage] = useState(null);
   const [artistImage, setArtistImage] = useState(null);
+  const [artType , setArtType] = useState('');
 
   const handleChange = (e) => {
     setArtImage(e.target.files[0]);
@@ -25,6 +26,7 @@ const AddArt = ({handleClose}) => {
       _fd.append("artistImage", artistImage);
       _fd.append("imagePath", artImage);
       _fd.append("artistName", artistName);
+      _fd.append("type", artType);
       setIsLoading(true);
       let _result = await addArtAPICall(_fd);
       setIsLoading(false);
@@ -36,6 +38,10 @@ const AddArt = ({handleClose}) => {
       handleToastMessage("error", "Please provide a valid data");
     }
   };
+
+const handleArt =(value)=>{
+  setArtType(value);
+}
 
   return (
     <>
@@ -58,6 +64,17 @@ const AddArt = ({handleClose}) => {
           style={{ marginBottom: "2rem" }}
           onChange={(value) => setArtistName(value.target.value)}
         />
+        <span>Art type</span>
+        <Select
+          fullWidth
+          required
+          variant="standard"
+          style={{ marginBottom: "2rem" }}
+          onChange={handleArt}
+        >
+          <MenuItem value={"featured"}>Featured</MenuItem>
+          <MenuItem value={"high resolution"}>High resolution</MenuItem>
+        </Select>
 
         <Button variant="basic" fullWidth component="label">
           {artImage?.name ? artImage?.name : "Upload art image"}

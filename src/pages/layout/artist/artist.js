@@ -24,6 +24,7 @@ const columns = [
   },
   "Total arts",
 ];
+const pageSize = 5;
 
 const Artist = (props) => {
   const [open, setOpen] = useState(false);
@@ -31,27 +32,29 @@ const Artist = (props) => {
   const [isLoading, setIsloading] = useState(false);
   const [editData, setEditData] = useState({});
   const [isEdit, setIsEdit] = useState(false);
-
+  const [totalCount, setTotalCount] = useState(false);
   const handleOpen = () => setOpen(true);
   const { classes } = props;
 
   useEffect(() => {
-    getArtist();
+    getArtist(true, 0);
   }, []);
 
-  const getArtist = async (loader = true) => {
+  const getArtist = async (loader = true, offset) => {
     if (loader) {
       setIsloading(true);
     }
-    let _response = await getArtistAPICall();
+    let _response = await getArtistAPICall(pageSize, offset);
     setIsloading(false);
     if (_response.isSuccess) {
+
       let _artist = _response.artist.map((arts) => {
         const { artist, count } = arts;
         let _user = [artist.artistName, artist.artistImage, count];
         return _user;
       });
       setArtist([..._artist]);
+      setTotalCount(_response.total)
     }
   };
   const handleDeleteRow = async (id) => {
@@ -75,7 +78,12 @@ const Artist = (props) => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <Table tableData={artist} title={"Artist"} columns={columns} />
+        <Table
+          tableData={artist}
+          title={"Artist"}
+          columns={columns}
+          pagination={false}
+        />
       )}
     </>
   );

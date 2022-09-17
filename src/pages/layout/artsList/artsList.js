@@ -10,7 +10,7 @@ import { Button } from "@mui/material";
 import Popup from "../../../components/popup/popup";
 import AddArt from "./addArt";
 import environment from "../../../environment";
-
+const pageSize = 5;
 const ArtsList = (props) => {
   const [open, setOpen] = useState(false);
   const [artsList, setArtsList] = useState([]);
@@ -18,6 +18,7 @@ const ArtsList = (props) => {
   const [isLoading, setIsloading] = useState(false);
   const [editData, setEditData] = useState({});
   const [isEdit, setIsEdit] = useState(false);
+  const [totalCount, setTotalCount] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const { classes } = props;
@@ -81,15 +82,15 @@ const ArtsList = (props) => {
     let _result = await deleteArtAPICall(arts[index]._id);
     if (_result.isSuccess) {
       handleToastMessage("success", "Art deleted successfully");
-      getArtsList(false);
+      getArtsList(0, false);
     }
   };
 
-  const getArtsList = async (loader = true) => {
+  const getArtsList = async (offset, loader = true) => {
     if (loader) {
       setIsloading(true);
     }
-    let _response = await getArtsAPICall();
+    let _response = await getArtsAPICall(pageSize, offset);
     setIsloading(false);
     if (_response.isSuccess) {
       let _artsList = _response.artsList.map((arts) => {
@@ -105,6 +106,7 @@ const ArtsList = (props) => {
         ];
         return _user;
       });
+      setTotalCount(_response.total)
       setArtsList([..._artsList]);
       setArts([..._response.artsList]);
     }
@@ -130,7 +132,11 @@ const ArtsList = (props) => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <Table tableData={artsList} title={"Arts"} columns={columns} />
+        <Table
+          tableData={artsList}
+          title={"Arts"}
+          columns={columns}
+          pagination={false} />
       )}
       <Popup isOpen={open} handleClose={handleClosePopup} title={`Add art`}>
         <AddArt handleClose={handleClosePopup} />

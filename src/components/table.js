@@ -10,7 +10,7 @@ const muiCache = createCache({
   prepend: true,
 });
 
-const Table = ({ title, tableData, columns }) => {
+const Table = ({ title, tableData, columns,pagination = true }) => {
   const [responsive, setResponsive] = useState("standard");
   const [tableBodyHeight, setTableBodyHeight] = useState("400px");
   const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState("");
@@ -30,6 +30,7 @@ const Table = ({ title, tableData, columns }) => {
     responsive,
     tableBodyHeight,
     tableBodyMaxHeight,
+    pagination: pagination,
     onTableChange: (action, state) => {
       console.log(action);
       console.dir(state);
