@@ -1,10 +1,11 @@
 import { React, useState, useEffect } from "react";
-
+import ReactPaginate from 'react-paginate';
 import { Spinner } from "../../../components/spinner/spinner";
 import moment from "moment";
 import Table from "../../../components/table";
 import { getArtistAPICall } from "../../services/arts";
 import environment from "../../../environment";
+import {Button} from '@mui/material'
 
 const columns = [
   { name: "Artist name" },
@@ -35,6 +36,8 @@ const Artist = (props) => {
   const [totalCount, setTotalCount] = useState(false);
   const handleOpen = () => setOpen(true);
   const { classes } = props;
+  const [pageIndex, setPageIndex] = useState(0);
+
 
   useEffect(() => {
     getArtist(true, 0);
@@ -53,7 +56,7 @@ const Artist = (props) => {
         let _user = [artist.artistName, artist.artistImage, count];
         return _user;
       });
-      setArtist([..._artist]);
+      setArtist([...artist, ..._artist]);
       setTotalCount(_response.total)
     }
   };
@@ -72,18 +75,37 @@ const Artist = (props) => {
     setIsEdit(true);
     setOpen(true);
   };
+  const handlePageClick =(index)=>{
+    setPageIndex((prev) => ++prev);
+    getArtist(false,1 + pageIndex);
+  }
 
   return (
     <>
       {isLoading ? (
         <Spinner />
       ) : (
-        <Table
-          tableData={artist}
-          title={"Artist"}
-          columns={columns}
-          pagination={false}
-        />
+        <>
+          <Table
+            tableData={artist}
+            title={"Artist"}
+            columns={columns}
+            pagination={false}
+          />
+           {
+            totalCount > artist.length &&
+            <Button
+              type="button"
+              variant="contained"
+              onClick={handlePageClick}
+              style={{ backgroundColor: "#194B43" }}
+              sx={{ mt: 3, mb: 2 }}
+            >
+              View More
+            </Button>
+          }
+
+        </>
       )}
     </>
   );

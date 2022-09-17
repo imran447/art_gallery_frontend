@@ -10,6 +10,9 @@ import { Button } from "@mui/material";
 import Popup from "../../../components/popup/popup";
 import AddArt from "./addArt";
 import environment from "../../../environment";
+import ReactPaginate from 'react-paginate';
+import TablePagination from '@mui/material/TablePagination';
+
 const pageSize = 5;
 const ArtsList = (props) => {
   const [open, setOpen] = useState(false);
@@ -18,6 +21,7 @@ const ArtsList = (props) => {
   const [isLoading, setIsloading] = useState(false);
   const [editData, setEditData] = useState({});
   const [isEdit, setIsEdit] = useState(false);
+  const [pageIndex, setPageIndex] = useState(0);
   const [totalCount, setTotalCount] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -107,8 +111,8 @@ const ArtsList = (props) => {
         return _user;
       });
       setTotalCount(_response.total)
-      setArtsList([..._artsList]);
-      setArts([..._response.artsList]);
+      setArtsList([...artsList, ..._artsList]);
+      setArts([...artsList, ..._response.artsList]);
     }
   };
 
@@ -116,6 +120,11 @@ const ArtsList = (props) => {
     setOpen(false);
     getArtsList(false);
   };
+  const handlePageClick = (index) => {
+    setPageIndex((prev) => ++prev);
+    getArtsList(1 + pageIndex, false);
+  }
+
   return (
     <>
       <div style={{ display: "flex", justifyContent: "end" }}>
@@ -132,11 +141,26 @@ const ArtsList = (props) => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <Table
-          tableData={artsList}
-          title={"Arts"}
-          columns={columns}
-          pagination={false} />
+        <>
+          <Table
+            tableData={artsList}
+            title={"Arts"}
+            columns={columns}
+            pagination={false} />
+          {
+            totalCount > artsList.length &&
+            <Button
+              type="button"
+              variant="contained"
+              onClick={handlePageClick}
+              style={{ backgroundColor: "#194B43" }}
+              sx={{ mt: 3, mb: 2 }}
+            >
+              View More
+            </Button>
+          }
+
+        </>
       )}
       <Popup isOpen={open} handleClose={handleClosePopup} title={`Add art`}>
         <AddArt handleClose={handleClosePopup} />
