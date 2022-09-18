@@ -93,6 +93,12 @@ function DashboardContent(props) {
       navigate: "/dashboard/artslist",
       active: false,
     },
+    {
+      Icon: <TrackChangesIcon />,
+      title: "Fun facts",
+      navigate: "/dashboard/funfacts",
+      active: false,
+    },
   ]);
 
   const navigate = useNavigate();

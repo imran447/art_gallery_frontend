@@ -111,7 +111,7 @@ const ArtsList = (props) => {
         return _user;
       });
       setTotalCount(_response.total)
-      if (artsList.length < _response.total) {
+      if (artsList.length <= _response.total) {
         let _artist = offset === 0 ? [] : artsList;
         setArtsList([..._artist, ..._artsList]);
         setArts([..._artist, ..._response.artsList]);

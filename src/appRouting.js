@@ -6,6 +6,7 @@ import RequireAuth from "./requireAuth";
 import UserList from "./pages/layout/userList/userList";
 import ArtsList from "./pages/layout/artsList/artsList";
 import Artist from "./pages/layout/artist/artist";
+import FunFacts from "./pages/layout/funfacts/funfacts";
 
 const routes = [
   { path: "/", component: <Login />, protectedPath: false },
@@ -16,6 +17,7 @@ const routes = [
     childRoutes: [
       { path: "", component: <UserList />, protectedPath: false },
       { path: "artsList", component: <ArtsList />, protectedPath: false },
+      { path: "funfacts", component: <FunFacts />, protectedPath: false },
       {
         path: "artist",
         component: <Artist />,
