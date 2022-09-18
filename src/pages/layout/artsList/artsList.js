@@ -22,7 +22,7 @@ const ArtsList = (props) => {
   const [editData, setEditData] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
-  const [totalCount, setTotalCount] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
 
   const handleOpen = () => setOpen(true);
   const { classes } = props;
@@ -79,7 +79,7 @@ const ArtsList = (props) => {
   ];
 
   useEffect(() => {
-    getArtsList();
+    getArtsList(0);
   }, []);
 
   const handleDelete = async (index) => {
@@ -111,16 +111,17 @@ const ArtsList = (props) => {
         return _user;
       });
       setTotalCount(_response.total)
-      if (artsList.length < totalCount) {
-        setArtsList([...artsList, ..._artsList]);
-        setArts([...artsList, ..._response.artsList]);
+      if (artsList.length < _response.total) {
+        let _artist = offset === 0 ? [] : artsList;
+        setArtsList([..._artist, ..._artsList]);
+        setArts([..._artist, ..._response.artsList]);
       }
     }
   };
 
   const handleClosePopup = () => {
     setOpen(false);
-    getArtsList(false);
+    getArtsList(0, false);
   };
   const handlePageClick = (index) => {
     setPageIndex((prev) => ++prev);
@@ -149,7 +150,7 @@ const ArtsList = (props) => {
             title={"Arts"}
             columns={columns}
             pagination={false} />
-          <div style={{ display: 'flex', alignItems:'center', justifyContent: 'space-between', marginTop: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '10px' }}>
             <span> {artsList.length} of {totalCount}</span>
             {
               totalCount > artsList.length &&

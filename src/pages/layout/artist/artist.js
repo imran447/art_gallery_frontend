@@ -57,8 +57,9 @@ const Artist = (props) => {
         let _user = [artist.artistName, artist.artistImage, count];
         return _user;
       });
-      if(artist.length <totalCount){
-        setArtist([...artist, ..._artist]);
+      if (artist.length < _response.total) {
+        let _artistList = offset === 0 ? [] : artist;
+        setArtist([..._artistList, ..._artist]);
         setTotalCount(_response.total)
       }
     }
